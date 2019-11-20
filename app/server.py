@@ -11,7 +11,7 @@ from fastai import *
 from fastai.vision import *
 
 model_file_url = 'https://www.dropbox.com/s/s7kglcllripjsu5/stage-1-50.pkl?dl=1'
-model_file_name = 'modstage-1-50.pklel'
+model_file_name = 'stage-1-50.pkl'
 classes = ['Abyssinian', 'Bengal', 'Birman', 'Bombay', 'British_Shorthair', 'Egyptian_Mau', 'Maine_Coon', 'Persian', 'Ragdoll', 'Russian_Blue', 'Siamese', 'Sphynx', 'american_bulldog', 'american_pit_bull_terrier', 'basset_hound', 'beagle', 'boxer', 'chihuahua', 'english_cocker_spaniel',
            'english_setter', 'german_shorthaired', 'great_pyrenees', 'havanese', 'japanese_chin', 'keeshond', 'leonberger', 'miniature_pinscher', 'newfoundland', 'pomeranian', 'pug', 'saint_bernard', 'samoyed', 'scottish_terrier', 'shiba_inu', 'staffordshire_bull_terrier', 'wheaten_terrier', 'yorkshire_terrier']
 path = Path(__file__).parent
@@ -33,11 +33,12 @@ async def download_file(url, dest):
 
 
 async def setup_learner():
-    await download_file(model_file_url, path/'models'/f'{model_file_name}.pth')
-    data_bunch = ImageDataBunch.single_from_classes(path, classes,
-                                                    ds_tfms=get_transforms(), size=224).normalize(imagenet_stats)
-    learn = cnn_learner(data_bunch, models.resnet34, pretrained=False)
-    learn.load(model_file_name)
+    await download_file(model_file_url, path/'models'/model_file_name)
+    # data_bunch = ImageDataBunch.single_from_classes(path, classes,
+    #                                                 ds_tfms=get_transforms(), size=224).normalize(imagenet_stats)
+    # learn = cnn_learner(data_bunch, models.resnet50, pretrained=False)
+    # learn.load(model_file_name)
+    learn = load_learner(path/'models', model_file_name)
     return learn
 
 loop = asyncio.get_event_loop()
